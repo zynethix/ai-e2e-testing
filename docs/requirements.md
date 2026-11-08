@@ -13,10 +13,11 @@
 - 用例 = 自然语言步骤 + 验证点，用 YAML 书写（Midscene Test 形态），非程序员可写。
 - 关键数值验证（文件尺寸、像素、元数据、文件名、网络请求数等）由 JS 代码精确断言；语义验证（"页面显示 X"、"按钮不可点"）由 AI 判定。
 - 原生浏览器控件（确认框等）不画在页面里，由代码接住。
+- 需要代码的步骤（JS 精确断言、接原生控件、截获下载）封装为 Midscene Test 自定义 Node，在 YAML 中作为一步调用；用例作者按 Node 说明书引用，不写代码。
 
 ### 2.2 执行
 
-- 一键命令跑全部用例（Playwright Test + Midscene 宿主）。
+- 一键命令跑全部用例（Midscene Test 宿主，Playwright 作浏览器驱动）。
 - 本地接入被测网页：id-copy-maker 用 file:// 打开 index.html；ai-skill-search 本地起 dev server。
 - 模型用云端 DeepSeek 视觉模型；被测素材只用公开假数据，不用真实敏感数据。
 
@@ -24,11 +25,11 @@
 
 - 每个用例有明确状态：passed / failed / skipped；失败区分「执行/脚本错」与「功能不符（断言失败）」。
 - 防假阳性三层：关键数值机器断言（确定性）；AI 断言写具体、可证伪；成功用例留证据可抽查。
-- 每次运行保存：Playwright trace、每步截图、Midscene 可视化报告（含 AI 每次判定的截图与依据）、HTML report、JSON results、执行记录。
+- 每次运行保存：Playwright trace、每步截图、Midscene Test 报告（精确到步骤，含 AI 每次判定的截图与依据）、运行结果文件（JSON）、执行记录。
 
 ### 2.4 报告
 
-- 运行后出 HTML 报告；Midscene 报告含 AI 定位框与判定依据，供人工二次核查。
+- 运行后出 HTML 报告，由 Midscene Test 报告担任（不另出 Playwright HTML report）；报告含 AI 定位框与判定依据，供人工二次核查。
 
 ## 3. 范围
 
@@ -51,9 +52,10 @@
 ## 5. 技术选型
 
 - Midscene.js（字节开源、免费）：自然语言步骤 + AI 视觉定位。
-- Playwright Test：执行宿主、trace、报告。
+- Midscene Test（@midscene/test，Beta）：执行宿主、YAML 用例、自定义 Node、报告。
+- Playwright：浏览器驱动、trace。
 - DeepSeek 视觉模型 API：云端、按量付费（单场景约几分钱、全量回归约几元人民币量级）。
-- 用例层 YAML + 验证层 JavaScript。
+- 用例层 YAML + 验证层 JavaScript（自定义 Node）。
 
 ## 6. 目录形态
 
