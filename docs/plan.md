@@ -4,7 +4,7 @@
 > 需求依据：docs/requirements.md（唯一开工依据）。本文件只存执行计划与任务页；需求裁决的最终落点回写 docs/requirements.md。
 > 红线（AGENTS.md）：安装依赖、删除/覆盖文件、联网部署、花钱动作先请示；完成后提醒 Git 存档；不动被测项目存量资产。
 
-**当前任务**：Task 1｜需求收口与场景提取——Q1–Q7 已裁决（见「需求裁决」节）；场景提取未开始。
+**当前任务**：Task 2｜脚手架与依赖安装。Task 1 已完成：Q1–Q7 裁决见「需求裁决」节，场景提取表落在 docs/scenarios.md。
 
 ## 结业目标（第一批）
 
@@ -37,7 +37,7 @@
 
 - 目标：裁决 Q1–Q7；产出 S1/S2/S9 操作步骤 + 验证点提取表。
 - 动作：只读 id-copy-maker 的 docs（必要时 index.html 对照），提取场景；问题按上表倾向请用户拍板。
-- 交付：场景提取表（每条验证点能指出页面落点）+ 裁决记录。提取表每条验证点带两列：「由谁判」（AI / JS / 不自动化）与「素材来源」。
+- 交付：场景提取表 docs/scenarios.md（每条验证点能指出页面落点）+ 裁决记录。提取表每条验证点带两列：「由谁判」（AI / JS / 不自动化）与「素材来源」。
   - 素材：一律运行时生成纯色图（像素断言需要干净背景），S1 用 3600×2000 让最大裁剪框顶满；不用网上样张。
   - S1 第 3、4 步（拖框停在边缘、等比缩放）标「拖框精度风险」。
   - S1 第 10 步「打印后用尺子量」改为分析导出文件：量导出图卡片边框像素换算毫米，断言 85.6×54mm ±0.5mm，由 JS 判；「拿真证件比对」标不自动化。
@@ -47,7 +47,7 @@
 ## Task 2｜脚手架与依赖安装
 
 - 目标：项目可列出测试、配置就绪。
-- 动作：新建以下文件；npm install 执行前先请示。
+- 动作：新建以下文件；npm install 执行前先请示。自定义 Node 清单按 docs/scenarios.md 末节实现。
   - package.json：精确锁版本 @midscene/test 1.17.7、@midscene/web 1.17.7、playwright 1.64.1；scripts.test:e2e 设 MIDSCENE_RUN_DIR=./artifacts 后调 midscene-test。
   - midscene.config.mjs：setup / fileSetup / nodes，files.include 指向 tests/。
   - .gitignore：artifacts/、.env、node_modules/。
