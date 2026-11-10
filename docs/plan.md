@@ -47,14 +47,19 @@
 ## Task 2｜脚手架与依赖安装
 
 - 目标：项目可列出测试、配置就绪。
-- 动作：新建 package.json（@midscene/test、@midscene/web、playwright，精确版本；scripts.test:e2e 调 midscene-test）、midscene.config.mjs（setup / fileSetup / nodes，files.include 指向 tests/）、.gitignore、.env.example；README 补运行说明。npm install 执行前先请示。
+- 动作：新建以下文件；npm install 执行前先请示。
+  - package.json：精确锁版本 @midscene/test 1.17.7、@midscene/web 1.17.7、playwright 1.64.1；scripts.test:e2e 设 MIDSCENE_RUN_DIR=./artifacts 后调 midscene-test。
+  - midscene.config.mjs：setup / fileSetup / nodes，files.include 指向 tests/。
+  - .gitignore：artifacts/、.env、node_modules/。
+  - .env.example：DeepSeek key、base_url=https://api.deepseek.com、模型名 deepseek-flash、MIDSCENE_MODEL_FAMILY=deepseek；填写前再查一次官方文档核实变量名与模型名。
+  - README：运行说明 + 目录布局前提（被测项目与本仓库为同工作区兄弟目录）。
 - 交付：4 个新文件 + README 更新。
 - 验证：node --check midscene.config.mjs 通过；npx midscene-test nodes 生成 Node 说明书（只加载配置、不执行 Node），且零模型调用（零花钱）；零花钱探针——一份只含自定义 Node 的 YAML（一步抛断言错误、一步抛普通错误、一步正常），读实际 summary.json，确认能区分两类失败并记下字段结构，作为 Q7 分类脚本的依据。
 - 前置：Task 1（运行形态定案）。
 
 ## Task 3｜S1 最小通路
 
-- 目标：1 条 S1 主路径端到端跑通四关：file:// 打开 index.html → DeepSeek 连通 → YAML 步骤执行 → 报告产出。
+- 目标：1 条 S1 主路径端到端跑通四关：file:// 打开 ../id-copy-maker/index.html（按配置文件位置解析为绝对路径）→ DeepSeek 连通 → YAML 步骤执行 → 报告产出。
 - 动作：新建 tests/id-copy-maker/s1-duplex.yaml（+ fileSetup 打开页面、开 trace）；配 .env 后跑单条。缺 DeepSeek key 时整个文件 skip 并写明原因，不报执行错。
 - 交付：1 条通过的用例。
 - 验证：退出码 0；产物出现 trace、截图、Midscene Test 报告；报告内含 AI 每次判定的截图与依据；实测一次页面 CSP 是否拦截 YAML 中在页面里执行 JS 的步骤，被拦则 README 写明「用例不写此类步骤，JS 检查一律用自定义 Node」，不拦则不写。
@@ -63,7 +68,7 @@
 ## Task 4｜补齐第一批用例
 
 - 目标：S1 全路径、S2、S9 用例 + JS 精确断言 + 防假阳性写法（具体、可证伪）。
-- 动作：按 Task 1 提取表写全 YAML 与断言；mock 素材随用例存放。
+- 动作：按 Task 1 提取表写全 YAML 与断言；mock 素材随用例存放；写失败分类脚本（按 Q7 读 summary.json 写出执行记录），一键命令跑完后自动执行。
 - 交付：第一批用例全集。
 - 验证：一键跑全量，运行结果文件统计与预期一致；两层负向演练——临时改错一个 AI 断言、再改错一个 JS 断言 Node，两条用例都变红，执行记录中失败类型都标「断言失败」而非「执行错」；演练后改回。
 - 前置：Task 3。

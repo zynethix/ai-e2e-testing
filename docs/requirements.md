@@ -18,12 +18,13 @@
 ### 2.2 执行
 
 - 一键命令跑全部用例（Midscene Test 宿主，Playwright 作浏览器驱动）。
-- 本地接入被测网页：id-copy-maker 用 file:// 打开 index.html；ai-skill-search 本地起 dev server。
-- 模型用云端 DeepSeek 视觉模型；被测素材只用公开假数据，不用真实敏感数据。
+- 本地接入被测网页：id-copy-maker 用 file:// 打开 ../id-copy-maker/index.html（被测项目与本仓库为同工作区兄弟目录）；ai-skill-search 本地起 dev server。
+- 模型用云端 DeepSeek 视觉模型 deepseek-flash；key 放本机 .env，不进 git。
+- 被测素材只用公开假数据，不用真实敏感数据。
 
 ### 2.3 结果判定与证据
 
-- 每个用例有明确状态：passed / failed / skipped；失败区分「执行/脚本错」与「功能不符（断言失败）」。
+- 每个用例有明确状态：passed / failed / skipped；失败区分「执行/脚本错」与「功能不符（断言失败）」。判法：失败步骤是 AI 断言或 JS 断言 Node ⇒ 断言失败，其余 ⇒ 执行错；由本仓库读 Midscene Test 的 summary.json 判定并写入执行记录（退出码不区分两者）。
 - 防假阳性三层：关键数值机器断言（确定性）；AI 断言写具体、可证伪；成功用例留证据可抽查。
 - 每次运行保存：Playwright trace、每步截图、Midscene Test 报告（精确到步骤，含 AI 每次判定的截图与依据）、运行结果文件（JSON）、执行记录。
 
@@ -52,8 +53,8 @@
 ## 5. 技术选型
 
 - Midscene.js（字节开源、免费）：自然语言步骤 + AI 视觉定位。
-- Midscene Test（@midscene/test，Beta）：执行宿主、YAML 用例、自定义 Node、报告。
-- Playwright：浏览器驱动、trace。
+- Midscene Test（@midscene/test 1.17.7，Beta）：执行宿主、YAML 用例、自定义 Node、报告；配套 @midscene/web 1.17.7。
+- Playwright 1.64.1：浏览器驱动、trace。
 - DeepSeek 视觉模型 API：云端、按量付费（单场景约几分钱、全量回归约几元人民币量级）。
 - 用例层 YAML + 验证层 JavaScript（自定义 Node）。
 
